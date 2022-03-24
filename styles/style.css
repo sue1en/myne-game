@@ -1,0 +1,50 @@
+main{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.minigame-body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#screen{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  border: 7px solid #d3d3d3;
+  background-color: #f1f1f1;
+  margin:20px;
+  height: 350px;
+  width: 300px;
+}
+#player-car{
+  /* display:none; */
+  display:flex;
+}
+button{
+  margin:20px;
+  padding:10px;
+}
+#btn-directions{
+  display: flex;
+}
+#gameCanvas{
+  /* background-color: rgb(52, 54, 45); */
+  border: 1px solid #000;
+}
+
+@media (max-width: 600px){
+  #screen{
+    height: 300px;
+    width: 250px;
+  }
+}
+
+@media (max-width: 300px){
+  #screen{
+    height: 270px;
+    width: 220px;
+  }
+}

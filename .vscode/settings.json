@@ -1,0 +1,21 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground":"#201b3d",
+        "activityBar.activeBorder": "#fa45d4",
+        "activityBar.background": "#36305c",
+        "activityBar.foreground": "#ffffff",
+        "activityBar.inactiveForeground": "#ffffff99",
+        "activityBarBadge.background": "#fa45d4",
+        "activityBarBadge.foreground": "#15202b",
+        "statusBar.background": "#201b3d",
+        "statusBar.foreground": "#f1f1f1",
+        "statusBarItem.hoverBackground": "#49436e",
+        "titleBar.activeBackground": "#36305c",
+        "titleBar.activeForeground": "#f1f1f1",
+        "titleBar.inactiveBackground": "#36305c99",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#61dafb",
+    "terminal.integrated.defaultProfile.windows": "C:\\Program Files\\Git\\bin\\bash.exe (migrated)",
+    "git.ignoreLimitWarning": true
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myne Game</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/reset.css">
+  </head>
+  <body>
+    <main>
+      <div id="minigame">
+        <div class="minigame-body">
+          <div class="minigame-screem">
+            <div id="screen">
+              
+            </div>
+          </div>
+          <button onclick="startGame()">start</button>
+          <div id="btn-directions">
+            <button id="btn-direct-up" onmouseup="gameControlls.clearMove()">Up</button>
+            <button id="btn-direct--down" onmousedown="gameControlls.moveDown()" onmouseup="gameControlls.clearMove()">Down</button>
+            <button id="btn-direct-left" onmousedown="gameControlls.moveLeft()" onmouseup="gameControlls.clearMove()">Left</button>
+            <button id="btn-direct-right" onmousedown="gameControlls.moveRight()" onmouseup="gameControlls.clearMove()">Right</button>
+          </div>
+          <button onclick="test()">test</button>
+        </div>
+        <div id="player-car">
+          <img src="images/pixel-car.png" alt="Car">
+          <div style="background-color:black; height: 60px; width: 30px;"></div>
+        </div>
+      </div>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
