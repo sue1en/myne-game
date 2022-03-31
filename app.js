@@ -1,28 +1,28 @@
 const screen = document.getElementById("screen");
+var newCanvas
 var ctx
 var player
-var obstacle
+var obstacleGroup = []
 
 function axis(){
   var posX
   var posY
   let canv = document.getElementById("gameCanvas")
-  // console.log(canv.getContext("2d"))
   canv.addEventListener("click", function(e){
     posX = e.offsetX
     posY = e.offsetY
     document.getElementById("input").value = `X: ${posX} | Y: ${posY}`
   })
-
-}
+};
 
 function startGame(){
   if(!document.getElementById("gameCanvas")){
     console.log("Criar canvas");
     gameArea.start();
-    ctx = document.getElementById("gameCanvas").getContext("2d");
+    var canvas = document.getElementById("gameCanvas");
+    ctx = canvas.getContext("2d");
     player = new playerCar(ctx, "images/pixel-car.png", "image");
-    obstacle = new obstacles(ctx)
+
     axis()
   }else{
     console.log("Fazer nada");
@@ -31,13 +31,14 @@ function startGame(){
 
 // Cria Game Area
 var gameArea = {
+  newCanvas: document.createElement("canvas"),
   start: function(){
-    newCanvas = document.createElement("canvas"),
-    newCanvas.id ="gameCanvas";
-    newCanvas.width = screen.clientWidth;
-    newCanvas.height = screen.clientHeight;
-    screen.appendChild(newCanvas);
-    newCanvas.interval = setInterval(updateCanvas, 1);
+    this.newCanvas.id ="gameCanvas";
+    this.newCanvas.width = screen.clientWidth;
+    this.newCanvas.height = screen.clientHeight;
+    screen.appendChild(this.newCanvas);
+    this.frameCount = 0;
+    this.interval = setInterval(updateCanvas, 1);
     eventListeners(window, "mousedown", actionByBtn);
     eventListeners(window, "mouseup", gameControlls.clearMove);
     eventListeners(window, "touchstart", actionByBtn);
@@ -45,8 +46,8 @@ var gameArea = {
     eventListeners(window, "keydown", actionByKey);
     eventListeners(window, "keyup",  gameControlls.clearMove);
   },
-  stop : function(){
-    clearInterval(newCanvas.interval)
+  stop: function(){
+    clearInterval(this.interval)
   }
 };
 
@@ -103,29 +104,58 @@ function playerCar(ctx, img, type){
   }
 };
 
-function obstacles(ctx){
-  this.width = 40;
-  this.height = 80;
+function obstacles(x, y){
+  this.width = 20;
+  this.height = 40;
   this.positionX = 0;
   this.positionY = 0;
-  this.x = 80;
-  this.y = 150;
+  this.x = x;
+  this.y = y;
   this.update = function(){
+    ctx = document.getElementById("gameCanvas").getContext("2d");
     ctx.fillStyle = "#0000ff";
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
+  this.newPosition = function(){
+    this.x += this.positionX;
+    this.y += this.positionY;
+  }
+};
+
+function everyinterval(n) {
+  if ((gameArea.frameCount / n) % 1 == 0) {return true;}
+  return false;
 }
 
-function updateCanvas(){
-  if (player.carCrash(obstacle)){
-    po("BATEU!!!")
-    gameArea.stop();
-  }else{
-    clearGameArea();
-    obstacle.update()
-    player.newPosition();
-    player.update();
+//TODO: deixar intervalo mais variado; variar posição dos obstaculos(esqueda/direita); limitar área da pista para obstáculos.
+
+
+function createObstacles(){
+  var x, y;
+  gameArea.frameCount += 1;
+  if(gameArea.frameCount == 1 || everyinterval(300)){
+    x = gameArea.newCanvas.width-100;
+    y = 0;
+    obstacleGroup.push(new obstacles(x, y))
+  };
+  for(i=0; i < obstacleGroup.length; i++){
+    obstacleGroup[i].y += 0.5;
+    obstacleGroup[i].update();
   }
+};
+
+function updateCanvas(){
+  for(i=0; i < obstacleGroup.length; i++){
+    if(player.carCrash(obstacleGroup[i])){
+      po("BATEU!!!")
+      gameArea.stop();
+      return
+    };
+  };  
+  clearGameArea();
+  createObstacles()
+  player.newPosition();
+  player.update();
 };
 
 const gameControlls = {
@@ -166,7 +196,7 @@ function actionByBtn(e){
       break;
     };
     e.preventDefault();
-  };
+};
     
 function actionByKey(e){
   if(e.defaultPrevented) {
