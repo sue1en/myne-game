@@ -5,7 +5,7 @@ var ctx
 function startGame(){
   if(!document.getElementById("gameCanvas")){
     console.log("Criar canvas");
-    gameArea();
+    gameArea.start();
     ctx = document.getElementById("gameCanvas").getContext("2d");
     player = new playerCar(ctx);
   }else{
@@ -14,21 +14,23 @@ function startGame(){
 };
 
 // Cria Game Area
-function gameArea(){
-  var newCanvas = document.createElement("canvas");
-  newCanvas.id ="gameCanvas";
-  newCanvas.width = screen.clientWidth;
-  newCanvas.height = screen.clientHeight;
-  screen.appendChild(newCanvas);
-  newCanvas.interval = setInterval(updateCanvas, 1)
-  console.log(newCanvas.interval)
-  eventListeners(window, "mousedown", actionByBtn)
-  eventListeners(window, "mouseup", gameControlls.clearMove)
-  eventListeners(window, "touchstart", actionByBtn)
-  eventListeners(window, "touchend", gameControlls.clearMove)
-  eventListeners(window, "keydown", actionByKey)
-  eventListeners(window, "keyup",  gameControlls.clearMove)
+var gameArea = {
+  start: function(){
+    newCanvas = document.createElement("canvas"),
+    newCanvas.id ="gameCanvas";
+    newCanvas.width = screen.clientWidth;
+    newCanvas.height = screen.clientHeight;
+    screen.appendChild(newCanvas);
+    newCanvas.interval = setInterval(updateCanvas, 1);
+    eventListeners(window, "mousedown", actionByBtn);
+    eventListeners(window, "mouseup", gameControlls.clearMove);
+    eventListeners(window, "touchstart", actionByBtn);
+    eventListeners(window, "touchend", gameControlls.clearMove)
+    eventListeners(window, "keydown", actionByKey);
+    eventListeners(window, "keyup",  gameControlls.clearMove);
+  }
 };
+
 
 // Limpa Game Area
 function clearGameArea(){
@@ -46,17 +48,20 @@ function playerCar(ctx){
   this.x = Number((ctx.canvas.width / 2) - (this.width / 2));
   this.y = Number(ctx.canvas.height - this.height);
   this.update = function(){
-    ctx.beginPath();
     ctx.fillRect(this.x, this.y, this.width, this.height);
   };
   this.newPosition = function(){
     this.x += this.positionX;
     this.y += this.positionY;
+    this.x = Math.min(Math.max(this.x, 0), ctx.canvas.width - this.width);
+    this.y = Math.min(Math.max(this.y, 0), ctx.canvas.height - this.height);
   };
 };
 
+function po(print){console.log(print)}
+
 function updateCanvas(){
-  clearGameArea(); 
+  clearGameArea();
   player.update();
   player.newPosition();
 };
