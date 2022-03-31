@@ -7,7 +7,7 @@ function startGame(){
     console.log("Criar canvas");
     gameArea.start();
     ctx = document.getElementById("gameCanvas").getContext("2d");
-    player = new playerCar(ctx);
+    player = new playerCar(ctx, "images/pixel-car.png", "image");
   }else{
     console.log("Fazer nada");
   }
@@ -31,7 +31,6 @@ var gameArea = {
   }
 };
 
-
 // Limpa Game Area
 function clearGameArea(){
   let canvas = document.getElementById("gameCanvas");
@@ -40,15 +39,27 @@ function clearGameArea(){
 };
 
 // Cria Player Car
-function playerCar(ctx){
+function playerCar(ctx, img, type){
   this.width = 30;
   this.height = 60;
   this.positionX = 0;
   this.positionY = 0;
   this.x = Number((ctx.canvas.width / 2) - (this.width / 2));
   this.y = Number(ctx.canvas.height - this.height);
+  this.type = type;
+  if(type == "image"){
+    this.carImg = new Image();
+    this.carImg.src = img
+  }
   this.update = function(){
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx;
+    if(type == "image"){
+      ctx.drawImage(this.carImg, this.x, this.y, this.width, this.height)
+    } else{
+      ctx.fillStyle = "#0000ff";
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+
+    }
   };
   this.newPosition = function(){
     this.x += this.positionX;
@@ -126,29 +137,3 @@ function actionByKey(e){
   };
   e.preventDefault();
 };
-
-
-/*
-  Inserir imagem do carro
-  carImage = new Image();
-  carImage.src = "images/pixel-car.png";
-  carImage.width = 30;
-  carImage.height = 60;
-  ctx.drawImage(carImage, this.x(), this.y(), this.width, this.height)
-
-  ctx.fillStyle = "#0000ff";
-  console.log(carImage)
-*/
-
-// Cria Game Area
-// var gameArea = {
-//   newCanvas: document.createElement("canvas"),
-//   test:function(){console.log( this.newCanvas)},
-//   start: function(){
-//     this.newCanvas.id = "gameCanvas";
-//     this.newCanvas.width = screen.clientWidth;
-//     this.newCanvas.height = screen.clientHeight;
-//     this.context = this.newCanvas.getContext("2d");
-//     screen.appendChild(this.newCanvas);
-//   } 
-// };
