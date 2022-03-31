@@ -20,31 +20,14 @@ function gameArea(){
   newCanvas.width = screen.clientWidth;
   newCanvas.height = screen.clientHeight;
   screen.appendChild(newCanvas);
-  newCanvas.interval = setInterval(updateCanvas, 2)
-  ctrl(miniGameBtn.btnUp, "mousedown", gameControlls.moveUp)
-  window.addEventListener("keydown", function(e){
-    if(e.defaultPrevented) {
-      return; // Do nothing if event already handled
-    };
-    switch(e.code){
-      case "ArrowLeft":
-        gameControlls.moveLeft();
-        break;
-      case "ArrowRight":
-        gameControlls.moveRight();
-        break;
-      case "ArrowUp":
-        gameControlls.moveUp();
-        break;
-      case "ArrowDown":
-        gameControlls.moveDown();
-        break;
-    };
-    e.preventDefault();
-  }, true);
-  window.addEventListener('keyup', function(e){
-    gameControlls.clearMove()
-  });
+  newCanvas.interval = setInterval(updateCanvas, 1)
+  console.log(newCanvas.interval)
+  eventListeners(window, "mousedown", actionByBtn)
+  eventListeners(window, "mouseup", gameControlls.clearMove)
+  eventListeners(window, "touchstart", actionByBtn)
+  eventListeners(window, "touchend", gameControlls.clearMove)
+  eventListeners(window, "keydown", actionByKey)
+  eventListeners(window, "keyup",  gameControlls.clearMove)
 };
 
 // Limpa Game Area
@@ -74,8 +57,8 @@ function playerCar(ctx){
 
 function updateCanvas(){
   clearGameArea(); 
-  player.newPosition();
   player.update();
+  player.newPosition();
 };
 
 const gameControlls = {
@@ -86,16 +69,59 @@ const gameControlls = {
   clearMove: function(){player.positionX = 0, player.positionY = 0}
 };
 
-const miniGameBtn = {
+const consoleBtn = {
   btnUp: document.getElementById("btn-direct-up"),
   btnDown: document.getElementById("btn-direct-down"),
   btnLeft: document.getElementById("btn-direct-left"),
   btnRight: document.getElementById("btn-direct-right"),
 };
 
-function ctrl(elemt, act, func){
-  elemt.addEventListener(act, func)
-}
+function eventListeners(elemt, action, func){
+  elemt.addEventListener(action, func)
+};
+
+function actionByBtn(e){
+  if(e.defaultPrevented) {
+    return; // Do nothing if event already handled
+  };
+  switch(e.target){
+    case consoleBtn.btnLeft:
+      gameControlls.moveLeft();
+      break;
+    case consoleBtn.btnRight:
+      gameControlls.moveRight();
+      break;
+    case consoleBtn.btnUp:
+      gameControlls.moveUp();
+      break;
+    case consoleBtn.btnDown:
+      gameControlls.moveDown();
+      break;
+  };
+  e.preventDefault();
+};
+
+function actionByKey(e){
+  if(e.defaultPrevented) {
+    return; // Do nothing if event already handled
+  };
+  switch(e.code){
+    case "ArrowLeft":
+      gameControlls.moveLeft();
+      break;
+    case "ArrowRight":
+      gameControlls.moveRight();
+      break;
+    case "ArrowUp":
+      gameControlls.moveUp();
+      break;
+    case "ArrowDown":
+      gameControlls.moveDown();
+      break;
+  };
+  e.preventDefault();
+};
+
 
 /*
   Inserir imagem do carro
