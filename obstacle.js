@@ -9,6 +9,10 @@ function Obstacles(ctx, x, y, color){
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
   };
+  this.restore = function(){
+    this.x = x;
+    this.y = y;
+  };
 };
 
 export {
