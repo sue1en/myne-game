@@ -2,42 +2,58 @@ const screen = document.getElementById("screen");
 import {PlayerCar} from "./player.js";
 import { Bg } from "./background.js";
 import { Obstacles } from "./obstacle.js";
-var newCanvas, ctx, player, actualStates, bg;
+var canvas, ctx, player, actualState, bg;
+var frameCount = 0;
 var obstacleGroup = [];
-
+var pause = false;
 var gameStatus = {
   play:0,
   playing:1,
   loose:2,
 };
+actualState = gameStatus.play
+
+//TODO: add score/ change obstacle speed by score/ edit background
 
 eventListeners(window, "mousedown", actionByBtn);
 
-var raceGame = {
-  start: function(){
-      console.log("Criar canvas");
-      gameArea.start();
-      var canvas = document.getElementById("gameCanvas");
-      ctx = canvas.getContext("2d");
-      bg = new Bg(ctx, "./images/bg-image-02.png", "image");
-      player = new PlayerCar(ctx, "images/pixel-car.png", "image");
-      updateCanvas()
-      // cancelAnimationFrame(requestAnimationFrame(updateCanvas))
-      axis()
-  },
+function start(){
+  if(actualState == gameStatus.play){
+    actualState = gameStatus.playing;
+    gameArea.start();
+  }else if(actualState == gameStatus.playing){
+    gameArea.reset()
+  }else if(actualState == gameStatus.loose){
+    actualState = gameStatus.playing;
+    gameArea.restart();
+  };
 };
 
+function pauseFunc(){
+  if(!pause){
+    pause = true
+  }else{
+    pause = false
+    updateCanvas()
+  };
+};
+
+function createCanvas(){
+  canvas = document.createElement("canvas");
+  canvas.id ="gameCanvas";
+  canvas.width = screen.clientWidth;
+  canvas.height = screen.clientHeight;
+  ctx = canvas.getContext("2d");
+  screen.appendChild(canvas);
+}
 
 // Cria Game Area
 var gameArea = {
-  newCanvas: document.createElement("canvas"),
   start: function(){
-    this.newCanvas.id ="gameCanvas";
-    this.newCanvas.width = screen.clientWidth;
-    this.newCanvas.height = screen.clientHeight;
-    screen.appendChild(this.newCanvas);
-    this.frameCount = 0;
-    // this.interval = setInterval(updateCanvas, 1);
+    createCanvas();
+    bg = new Bg(ctx, "bg-image-02.png", "image");
+    player = new PlayerCar(ctx, "images/pixel-car.png", "image");
+    updateCanvas();
 
     eventListeners(window, "mousedown", actionByBtn);
     eventListeners(window, "mouseup", gameControlls.clearMove);
@@ -47,15 +63,26 @@ var gameArea = {
     eventListeners(window, "keyup",  gameControlls.clearMove);
   },
   stop: function(){
-    clearInterval()
+    pause = true;
+  },
+  reset: function(){ 
+    clearGameArea()
+    obstacleGroup = [];
+    player.restore();
+  },
+  restart: function(){ 
+    clearGameArea()
+    player.restore();
+    pause = false;
+    obstacleGroup = [];
+    updateCanvas()
+    // bg = {};
   }
 };
 
 // Limpa Game Area
 function clearGameArea(){
-  let canvas = document.getElementById("gameCanvas");
-  let context = canvas.getContext("2d");
-  context.clearRect(0, 0, canvas.width, canvas.height)
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
 };
 
 function createObstacles(){
@@ -68,11 +95,11 @@ function createObstacles(){
   const roadPositionX = Math.floor(Math.random()* x.length);
   const obstacle = new Obstacles(ctx, x[roadPositionX], -70, randomColor());
   obstacleGroup.push(obstacle);
-  gameArea.frameCount = randomIntNum(50,200)
+  frameCount = randomIntNum(50,200)
 };
 
 function updateObstacle(){
-  gameArea.frameCount == 0 ? createObstacles() : gameArea.frameCount--;
+  frameCount == 0 ? createObstacles() : frameCount--;
   for(let i = 0; i < obstacleGroup.length; i++){
     if(obstacleGroup[i].y < ctx.canvas.clientHeight + obstacleGroup[i].height){
       obstacleGroup[i].y +=2
@@ -84,29 +111,16 @@ function updateObstacle(){
   };
 };
 
-function gameOver(){
-  let x = ctx.canvas.width/2;
-  let y = ctx.canvas.height/2;
-  ctx.shadowOffsetX = 2;
-  ctx.shadowOffsetY = 2;
-  ctx.shadowBlur = 0;
-  ctx.shadowColor = 'rgba(0, 0, 0, 1)';
-  ctx.font = "bold 40px arial";
-  ctx.textAlign = 'center';
-  ctx.textBaseline = "middle"
-  ctx.fillStyle = "#ff00ff";
-  ctx.fillText("Game Over", x, y)
-}
-
 //update moves on the canvas
 function updateCanvas(){
+  if(pause) return;
   setTimeout(function(){
     for(let i=0; i < obstacleGroup.length; i++){
       if(player.carCrash(obstacleGroup[i])){
         po("BATEU!!!");
-        gameOver();
-        gameArea.stop();
-        cancelAnimationFrame(requestAnimationFrame(updateCanvas));
+        pause = true;
+        gameOver(ctx);
+        actualState = gameStatus.loose;
         return
       };
     };
@@ -129,6 +143,7 @@ const gameControlls = {
 
 const consoleBtn = {
   btnStart: document.getElementById("btn-start"),
+  btnPause: document.getElementById("btn-pause"),
   btnUp: document.getElementById("btn-direct-up"),
   btnDown: document.getElementById("btn-direct-down"),
   btnLeft: document.getElementById("btn-direct-left"),
@@ -157,7 +172,10 @@ function actionByBtn(e){
       gameControlls.moveDown();
       break;
     case consoleBtn.btnStart:
-      raceGame.start();
+      start();
+      break;
+    case consoleBtn.btnPause:
+      pauseFunc();
       break;
     };
     e.preventDefault();
@@ -184,6 +202,15 @@ function actionByKey(e){
   e.preventDefault();
 };
 
+function gameOver(ctx){
+  let x = ctx.canvas.width/2;
+  let y = ctx.canvas.height/2;
+  ctx.font = "bold 40px arial";
+  ctx.textAlign = 'center';
+  ctx.textBaseline = "middle"
+  ctx.fillStyle = "#ff00ff";
+  return ctx.fillText("Game Over", x, y)
+}
 //____________________________________________
 
 function randomIntNum(max, min){
