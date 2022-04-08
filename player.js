@@ -2,17 +2,16 @@ function PlayerCar(ctx, img, type){
   this.width = 35;
   this.height = 70;
   this.angle = 0;
-  this.rot = 0
   this.positionX = 0;
   this.positionY = 0;
   this.x = Number((ctx.canvas.width / 2) - (this.width / 2));
   this.y = Number(ctx.canvas.height - this.height)-10;
-  console.log(this.y)
+  this.crash = false;
   this.type = type;
   if(type == "image"){
     this.carImg = new Image();
     this.carImg.src = img
-  }
+  };
   this.update = function(){
     ctx;
     if(type == "image"){
@@ -40,6 +39,7 @@ function PlayerCar(ctx, img, type){
     this.x = Math.min(Math.max(this.x, Number((ctx.canvas.width*10)/100)), ctx.canvas.width - (this.width + Number((ctx.canvas.width*10)/100)));
     this.y = Math.min(Math.max(this.y, 0), ctx.canvas.height - this.height);
   };
+
   this.carCrash = function(obstacle){
     var playerLeft = this.x;
     var playerRight = this.x + (this.width);
@@ -51,10 +51,16 @@ function PlayerCar(ctx, img, type){
     var obstacleBotton = obstacle.y + (obstacle.height);
     var crash = true;
     if((playerTop > obstacleBotton) || (playerBottom < obstacleTop) || (playerLeft > obstacleRight) || (playerRight < obstacleLeft)){
-      crash = false;
+      crash = this.crash;
     }
     return crash;
-  }
+  };
+
+  this.restore = function(){
+    this.x = Number((ctx.canvas.width / 2) - (this.width / 2));
+    this.y = Number(ctx.canvas.height - this.height)-10;
+    this.angle = 0;
+  };
 };
 
 export {
