@@ -8,7 +8,120 @@ main{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border: 1px dashed #000;
+  background-color: #e8e8e8;
 }
+/* ##___BUTTONS */
+/* button{
+  background-color: none;
+} */
+#btn-group{
+  margin:10px;
+  display: flex;
+  flex-direction:column;
+}
+#btn-masters{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  border: 1px dashed #000;
+}
+.btn-masters-item{
+  padding: 0 2px;
+  margin: 2px;
+  width: 55px;
+  border: none;
+  border-radius: 10px;
+  background-image: linear-gradient(10deg, #4f4f4f, #a9a9a9);
+  box-shadow: 1px 2px 3px #303030;
+  transform: rotate(-35deg);
+  
+  text-decoration: none;
+  text-align: center;
+  font-size: 12px;
+  color: #ffffff;
+}
+#btn-gamecontrols{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px dashed #000;
+}
+#btn-directions{
+  width: 130px;
+  height: 130px;
+  align-self: center;
+  padding: 5px;
+  border-radius: 50%;
+  border: 1px solid #e2e2e2;
+  background-image:
+    linear-gradient(#e3e3e3, #f5f5f5),
+    linear-gradient(230deg, #b9b9b9, #ffffff);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+.btn-directions-item{
+  width: 35px;
+  height: 40px;
+  padding: 0 0 15px 0;
+  border-bottom: none;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  background-image: linear-gradient(10deg, #1f1f1f, #373737);
+  
+  font-size: 25px;
+  text-align: center;
+  color: #ffffff;
+}
+.btn-directions-item:nth-child(1){
+  transform: rotate(0deg) translate(52px, 15px);
+  box-shadow: 1px 0px 3px #464646;
+}
+.btn-directions-item:nth-child(2){
+  transform: rotate(90deg) translate(50px, -50px);
+  box-shadow: 2px 0px 3px #464646;
+}
+.btn-directions-item:nth-child(3){
+  transform: rotate(180deg) translate(25px, -85px);
+  box-shadow: 0px -2px 3px #464646;
+}
+.btn-directions-item:nth-child(4){
+  transform: rotate(270deg) translate(-10px, 16px);
+  box-shadow: -1px 0px 3px #464646;
+}
+
+#btn-actions{
+  align-self: center;
+  transform: rotate(155deg);
+  padding: 5px;
+  border-radius: 40px;
+  border: 1px solid #e2e2e2;
+  background-image:
+    linear-gradient(#e3e3e3, #f5f5f5),
+    linear-gradient(30deg, #b9b9b9, #ffffff);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+.btn-actions-item{
+  transform: rotate(205deg);
+  width: 40px;
+  height: 40px;
+  margin:5px;
+  background-image: linear-gradient(10deg, #ae1313, #e75b5b);;
+  border-radius: 50%;
+  border: 1px solid #780c0c;
+  box-shadow: 1px 2px 2px #232323;
+
+  text-decoration: none;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  color:#f1f1f1
+}
+
+/* ##___BUTTONS */
 #screen{
   display:flex;
   align-items: center;
@@ -22,13 +135,6 @@ main{
 #player-car{
   /* display:none; */
   display:flex;
-}
-button{
-  margin:20px;
-  padding:10px;
-}
-#btn-directions{
-  display: flex;
 }
 #gameCanvas{
   /* background-color: rgb(52, 54, 45); */
