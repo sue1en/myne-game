@@ -142,12 +142,14 @@ const gameControlls = {
 };
 
 const consoleBtn = {
-  btnStart: document.getElementById("btn-start"),
-  btnPause: document.getElementById("btn-pause"),
-  btnUp: document.getElementById("btn-direct-up"),
-  btnDown: document.getElementById("btn-direct-down"),
-  btnLeft: document.getElementById("btn-direct-left"),
-  btnRight: document.getElementById("btn-direct-right"),
+  btnStart: document.getElementById("btn-masters-start"),
+  btnPause: document.getElementById("btn-masters-pause"),
+  btnUp: document.getElementById("btn-directions-up"),
+  btnDown: document.getElementById("btn-directions-down"),
+  btnLeft: document.getElementById("btn-directions-left"),
+  btnRight: document.getElementById("btn-directions-right"),
+  btnActionA: document.getElementById("btn-actions-a"),
+  btnActionB: document.getElementById("btn-actions-b"),
 };
 
 function eventListeners(elemt, action, func){
@@ -176,6 +178,12 @@ function actionByBtn(e){
       break;
     case consoleBtn.btnPause:
       pauseFunc();
+      break;
+    case consoleBtn.btnActionA:
+      console.log("Eu sou A");
+      break;
+    case consoleBtn.btnActionB:
+      console.log("Eu sou B");
       break;
     };
     e.preventDefault();
