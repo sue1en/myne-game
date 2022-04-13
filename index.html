@@ -10,20 +10,23 @@
   </head>
   <body>
     <main>
+      <input type="text" id="input" value="" disabled/>
       <div id="minigame">
-        <div class="minigame-body">
-          <div class="minigame-screem">
-            <input type="text" id="input" value="" disabled/>
+        <div id="minigame-body">
+          <div id="minigame-screen">
             <div id="screen">
             </div>
           </div>
+          <div id="minigame-name">
+              <p class="minigame-name-text"> Myne-Game</p>
+          </div>
           <div id="btn-group">
-            <div id="btn-masters">
-              <button id="btn-masters-start" class="btn-masters-item">start</button>
-              <button id="btn-masters-pause" class="btn-masters-item">pause</button>
-            </div>
             <div id="btn-gamecontrols">
               <div id="btn-directions">
+                <svg class="btn-svg">
+                  <rect class="btn-svg-rect"/>
+                  <circle class="btn-svg-circle"/>
+                </svg>
                 <button id="btn-directions-up" class="btn-directions-item">▲</button>
                 <button id="btn-directions-right" class="btn-directions-item">▲</button>
                 <button id="btn-directions-down" class="btn-directions-item">▲</button>
@@ -34,7 +37,30 @@
                 <button id="btn-actions-b" class="btn-actions-item">B</button>
               </div>
             </div>
+            <div id="btn-masters">
+              <div class="btn-masters-borders">
+                <button id="btn-masters-start" class="btn-masters-item">start</button>
+              </div>
+              <div class="btn-masters-borders">
+                <button id="btn-masters-pause" class="btn-masters-item">pause</button>
+              </div>
+            </div>
           </div>
+          <div id="botton-decoration">
+            <div class="botton-right-corner">
+              <div class="botton-right-corner triangle">
+                <div class="botton-right-corner sound-stripes">
+                  <div class="stripes-item"></div>
+                  <div class="stripes-item"></div>
+                  <div class="stripes-item"></div>
+                  <div class="stripes-item"></div>
+                  <div class="stripes-item"></div>
+                  <div class="stripes-item"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>     
       </div>
     </main>
     <script src="app.js" type="module"></script>
