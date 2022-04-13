@@ -102,6 +102,14 @@ main{
   font-size: 14px;
   color: #f5f5f5;
 }
+.btn-masters-item:active{
+  box-shadow: inset -3px 6px 2px #232323;
+  border: 0.2em solid #232323;
+  background-color:#545454;
+  color: #d2d2d2;
+}
+
+
 #btn-gamecontrols{
   display: flex;
   justify-content: space-between;
@@ -154,6 +162,10 @@ main{
   text-align: center;
   color: #757575;
 }
+.btn-directions-item:active{
+  color: #5d5d5d;
+  background-color: #272727;
+}
 .btn-directions-item:nth-child(2){
   transform: rotate(0deg) translate(8.5px, -5px);
   box-shadow:inset -1px 3px 1px #4b4b4b;
@@ -169,6 +181,18 @@ main{
 .btn-directions-item:nth-child(5){
   transform: rotate(270deg) translate(8.5px, -33.5px);
   box-shadow:inset 1px 1px 1px #232323, inset -3px 0px 1px #4b4b4b;
+}
+.btn-directions-item:nth-child(2):active{
+  box-shadow:inset -1px 20px 4px #232323, inset 0px -6px 7px #4b4b4b;
+}
+.btn-directions-item:nth-child(3):active{
+  box-shadow:inset 1px 20px 2px #232323, inset 0px -6px 7px #4b4b4b;
+}
+.btn-directions-item:nth-child(4):active{
+  box-shadow:inset 1px 20px 4px #232323, inset 0px -6px 7px #4b4b4b;
+}
+.btn-directions-item:nth-child(5):active{
+  box-shadow:inset 1px 20px 2px #232323, inset 0px -6px 7px #4b4b4b;
 }
 
 #btn-actions{
@@ -192,12 +216,18 @@ main{
   border-radius: 50%;
   border: 0.15em solid #3b0808;
   box-shadow:inset 1px -2px 2px #510b0b, inset -1px 4px 1px #e8a0a0;
-
+  
   text-decoration: none;
   text-align: center;
   font-weight: bold;
   font-size: 18px;
   color:#ffc3c3;
+}
+
+.btn-actions-item:active{
+  background-color:#8c1313;
+  box-shadow:inset 1px -10px 2px #510b0b, inset -1px 1px 1px #e8a0a0;
+  
 }
 /* ##___BUTTONS */
 
