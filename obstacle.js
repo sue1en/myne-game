@@ -1,10 +1,11 @@
-function Obstacles(ctx, x, y, color){
+export function Obstacles(ctx, x, y, color){
   this.width = 40;
   this.height = 70;
   this.x = x;
   this.y = y;
   this.color = color;
-  this.update = function(){
+  
+  this.drawItem = function(){
     // ctx = document.getElementById("gameCanvas").getContext("2d");
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -14,7 +15,3 @@ function Obstacles(ctx, x, y, color){
     this.y = y;
   };
 };
-
-export {
-  Obstacles
-}

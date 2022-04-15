@@ -1,4 +1,4 @@
-function PlayerCar(ctx, img, type){
+export function PlayerCar(ctx, img, type){
   this.width = 35;
   this.height = 70;
   this.angle = 0;
@@ -12,7 +12,7 @@ function PlayerCar(ctx, img, type){
     this.carImg = new Image();
     this.carImg.src = img
   };
-  this.update = function(){
+  this.drawItem = function(){
     ctx;
     if(type == "image"){
       ctx.save()
@@ -21,7 +21,8 @@ function PlayerCar(ctx, img, type){
       ctx.translate(-(this.x + this.width/2),-(this.y + (this.height-this.height/4)))
       ctx.drawImage(this.carImg, this.x, this.y, this.width, this.height)
       ctx.restore()
-    } else{
+
+    } else {
       ctx.save()
       ctx.translate((this.x + this.width/2), (this.y + (this.height-this.height/4)))
       ctx.rotate(this.angle)
@@ -31,6 +32,7 @@ function PlayerCar(ctx, img, type){
       ctx.restore()
     }
   };
+
   this.newPosition = function(){
     this.x += this.positionX;
     this.y += this.positionY;
@@ -62,7 +64,3 @@ function PlayerCar(ctx, img, type){
     this.angle = 0;
   };
 };
-
-export {
-  PlayerCar
-}

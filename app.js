@@ -2,7 +2,8 @@ const screen = document.getElementById("screen");
 import {PlayerCar} from "./player.js";
 import { Bg } from "./background.js";
 import { Obstacles } from "./obstacle.js";
-var canvas, ctx, player, actualState, bg;
+import { Score } from "./score.js";
+var canvas, ctx, player, score, actualState, bg;
 var frameCount = 0;
 var obstacleGroup = [];
 var pause = false;
@@ -21,11 +22,14 @@ function start(){
   if(actualState == gameStatus.play){
     actualState = gameStatus.playing;
     gameArea.start();
+    axis()
   }else if(actualState == gameStatus.playing){
     gameArea.reset()
+    axis()
   }else if(actualState == gameStatus.loose){
     actualState = gameStatus.playing;
     gameArea.restart();
+    axis()
   };
 };
 
@@ -51,8 +55,9 @@ function createCanvas(){
 var gameArea = {
   start: function(){
     createCanvas();
-    bg = new Bg(ctx, "bg-image-02.png", "image");
+    // bg = new Bg(ctx, "bg-image-04.png", "image");
     player = new PlayerCar(ctx, "images/pixel-car.png", "image");
+    score = new Score(ctx);
     updateCanvas();
 
     eventListeners(window, "mousedown", actionByBtn);
@@ -69,10 +74,13 @@ var gameArea = {
     clearGameArea()
     obstacleGroup = [];
     player.restore();
+    score.restore()
+    pause = false
   },
   restart: function(){ 
     clearGameArea()
     player.restore();
+    score.restore()
     pause = false;
     obstacleGroup = [];
     updateCanvas()
@@ -103,7 +111,7 @@ function updateObstacle(){
   for(let i = 0; i < obstacleGroup.length; i++){
     if(obstacleGroup[i].y < ctx.canvas.clientHeight + obstacleGroup[i].height){
       obstacleGroup[i].y +=2
-      obstacleGroup[i].update()
+      obstacleGroup[i].drawItem()
     } else {
       obstacleGroup.splice(i, 1);
       i--
@@ -126,10 +134,13 @@ function updateCanvas(){
     };
     requestAnimationFrame(updateCanvas);
     clearGameArea();
-    bg.update();
+    // bg.update();
     updateObstacle();
+    score.drawItem();
+    score.update(player, obstacleGroup);
+    player.drawItem();
     player.newPosition();
-    player.update();
+    // po(player.crash)
   }, 1000/60)
 }
 
