@@ -5,7 +5,7 @@ export function PlayerCar(ctx, img, type){
   this.positionX = 0;
   this.positionY = 0;
   this.x = Number((ctx.canvas.width / 2) - (this.width / 2));
-  this.y = Number(ctx.canvas.height - this.height)-10;
+  this.y = Number(ctx.canvas.height - this.height)-20;
   this.crash = false;
   this.type = type;
   if(type == "image"){

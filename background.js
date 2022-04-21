@@ -1,26 +1,31 @@
-function Bg(ctx, img, type){
-  this.x = 0;
-  this.y = 0;
+export function Bg(ctx, y, img, type){
   this.type = type
-  if(this.type == "image"){
+  if(type == "image"){
     this.bgImage = new Image()
     this.bgImage.src = img
   }
-  this.width = Number(ctx.canvas.width);
-  this.height = Number(this.bgImage.naturalHeight);
+  this.width = ctx.canvas.width;
+  this.height = ctx.canvas.height;
+  this.x = 0;
+  this.y = y;
+
+  this.hSpeed = 5;
+  this.position = this.height
+  
   // this.height = Number(ctx.canvas.height);
   // this.update = function(){
   //   pattern = ctx.createPattern(this.bgImage, "repeat-y");
   //   ctx.fillStyle = pattern;
   //   ctx.fillRect(this.x, this.y, this.width, this.height);
   // };
-  this.update = function(){
+  // console.log(this.bgImage.naturalHeight)
+  this.drawItem = function(){
+    ctx;
     ctx.drawImage(this.bgImage, this.x, this.y, this.width, this.height);
-    ctx.drawImage(this.bgImage, this.x, this.y+this.height, this.width, this.height);
-    ctx.drawImage(this.bgImage, this.x, this.y+this.height*2, this.width, this.height);
   }
-}
 
-export {
-  Bg
+  this.update = function(){
+    this.position = ((this.position + this.hSpeed)% this.height + this.height) % this.height;
+    this.y++;
+  }
 }

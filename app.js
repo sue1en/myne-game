@@ -1,20 +1,25 @@
-const screen = document.getElementById("screen");
 import {PlayerCar} from "./player.js";
 import { Bg } from "./background.js";
 import { Obstacles } from "./obstacle.js";
 import { Score } from "./score.js";
-var canvas, ctx, player, score, actualState, bg;
+import { GameOver } from "./gameover.js";
+import {randomIntNum, randomfltNum, randomColor, randomArrayIndx, axis, po} from "./utils.basicfunctions.js";
+
+const screen = document.getElementById("screen");
+
+var canvas, ctx, player, score, bg, gameOver;
 var frameCount = 0;
 var obstacleGroup = [];
+var bgGroup = [];
 var pause = false;
 var gameStatus = {
   play:0,
   playing:1,
   loose:2,
 };
-actualState = gameStatus.play
+var actualState = gameStatus.play
 
-//TODO: add score/ change obstacle speed by score/ edit background
+//TODO: 1º move background speed by score
 
 eventListeners(window, "mousedown", actionByBtn);
 
@@ -22,6 +27,7 @@ function start(){
   if(actualState == gameStatus.play){
     actualState = gameStatus.playing;
     gameArea.start();
+    setInterval(function(){score.updateByTime(player)}, 200)
     axis()
   }else if(actualState == gameStatus.playing){
     gameArea.reset()
@@ -55,9 +61,11 @@ function createCanvas(){
 var gameArea = {
   start: function(){
     createCanvas();
-    // bg = new Bg(ctx, "bg-image-04.png", "image");
-    player = new PlayerCar(ctx, "images/pixel-car.png", "image");
+    bg = new Bg(ctx, 0, "bg-image-03.png", "image");
+    player = new PlayerCar(ctx, "images/player-race-car.png", "image");
     score = new Score(ctx);
+    gameOver = new GameOver(ctx)
+    
     updateCanvas();
 
     eventListeners(window, "mousedown", actionByBtn);
@@ -71,20 +79,19 @@ var gameArea = {
     pause = true;
   },
   reset: function(){ 
-    clearGameArea()
+    clearGameArea();
     obstacleGroup = [];
     player.restore();
-    score.restore()
-    pause = false
+    score.restore();
+    pause = false;
   },
   restart: function(){ 
-    clearGameArea()
-    player.restore();
-    score.restore()
-    pause = false;
+    clearGameArea();
     obstacleGroup = [];
-    updateCanvas()
-    // bg = {};
+    score.restore();
+    player.restore();
+    pause = false;
+    updateCanvas();
   }
 };
 
@@ -94,24 +101,23 @@ function clearGameArea(){
 };
 
 function createObstacles(){
-  const xCanvas = ctx.canvas.width
-  const xLeft = Number((xCanvas*15)/100);
-  const xCenter = Number((xCanvas /2) - (40 / 2));
-  const xRight = Number((xCanvas*72)/100);
-  const x = [xLeft, xCenter, xRight];
-  
-  const roadPositionX = Math.floor(Math.random()* x.length);
-  const obstacle = new Obstacles(ctx, x[roadPositionX], -70, randomColor());
+  const CanvasX = ctx.canvas.width
+  const LeftX = Number((CanvasX*15)/100);
+  const CenterX = Number((CanvasX /2) - (40 / 2));
+  const RightX = Number((CanvasX*72)/100);
+  const x = [LeftX, CenterX, RightX];
+
+  const obstacle = new Obstacles(ctx, randomArrayIndx(x), -70, "image");
   obstacleGroup.push(obstacle);
-  frameCount = randomIntNum(50,200)
+  frameCount = randomIntNum(100,200);
 };
 
 function updateObstacle(){
   frameCount == 0 ? createObstacles() : frameCount--;
   for(let i = 0; i < obstacleGroup.length; i++){
     if(obstacleGroup[i].y < ctx.canvas.clientHeight + obstacleGroup[i].height){
-      obstacleGroup[i].y +=2
-      obstacleGroup[i].drawItem()
+      obstacleGroup[i].y += Number(score.speed)
+      obstacleGroup[i].drawItem();
     } else {
       obstacleGroup.splice(i, 1);
       i--
@@ -127,20 +133,20 @@ function updateCanvas(){
       if(player.carCrash(obstacleGroup[i])){
         po("BATEU!!!");
         pause = true;
-        gameOver(ctx);
+        gameOver.drawItem();
         actualState = gameStatus.loose;
         return
       };
     };
-    requestAnimationFrame(updateCanvas);
     clearGameArea();
-    // bg.update();
-    updateObstacle();
+    bg.drawItem()
+    // updateBG()
     score.drawItem();
-    score.update(player, obstacleGroup);
+    score.updateSpeed();
+    updateObstacle();
     player.drawItem();
     player.newPosition();
-    // po(player.crash)
+    requestAnimationFrame(updateCanvas);
   }, 1000/60)
 }
 
@@ -219,41 +225,4 @@ function actionByKey(e){
       break;
   };
   e.preventDefault();
-};
-
-function gameOver(ctx){
-  let x = ctx.canvas.width/2;
-  let y = ctx.canvas.height/2;
-  ctx.font = "bold 40px arial";
-  ctx.textAlign = 'center';
-  ctx.textBaseline = "middle"
-  ctx.fillStyle = "#ff00ff";
-  return ctx.fillText("Game Over", x, y)
-}
-//____________________________________________
-
-function randomIntNum(max, min){
-  return Math.floor(Math.random() * (max - min +1)) + min;
-};
-
-function randomColor(){
-  return `rgb(${randomIntNum(0, 255)},${randomIntNum(0, 255)},${randomIntNum(0, 255)})`;
-};
-
-function randomfltNum(max, min){
-  const n = Math.random() * (max - min +1) + min;
-  return Number(n.toFixed(2));
-};
-
-function po(print){console.log(print)}
-
-function axis(){
-  var posX
-  var posY
-  let canv = document.getElementById("gameCanvas")
-  canv.addEventListener("click", function(e){
-    posX = e.offsetX
-    posY = e.offsetY
-    document.getElementById("input").value = `X: ${posX} | Y: ${posY}`
-  })
 };

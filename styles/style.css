@@ -50,6 +50,8 @@ main{
 
 #gameCanvas{
   border-radius:1em;
+  height: 300px;
+  width: 300px;
 }
 /* ##___Screen */
 
@@ -285,6 +287,10 @@ main{
     height: 260px;
     width: 260px;
   }
+  #gameCanvas{
+    height: 260px;
+    width: 260px;
+  }
   .minigame-name-text{
     font-size: 16px;
   }
@@ -391,6 +397,10 @@ main{
     margin:1.2em 1.4em 0.5em 1.4em;
   }
   #screen{
+    height: 200px;
+    width: 200px;
+  }
+  #gameCanvas{
     height: 200px;
     width: 200px;
   }
