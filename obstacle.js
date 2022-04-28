@@ -29,6 +29,18 @@ export function Obstacles(ctx, x, y, type){
     }
   };
 
+  this.update = function(array, score){
+    for(let i = 0; i < array.length; i++){
+      if(array[i].y < ctx.canvas.clientHeight + array[i].height){
+        array[i].y += score.speed +0.05
+        array[i].drawItem();
+      } else {
+        array.splice(i, 1);
+        i--
+      };    
+    };
+  };
+
   this.restore = function(){
     this.x = x;
     this.y = y;

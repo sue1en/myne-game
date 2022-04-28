@@ -7,7 +7,7 @@ import {randomIntNum, randomfltNum, randomColor, randomArrayIndx, axis, po} from
 
 const screen = document.getElementById("screen");
 
-var canvas, ctx, player, score, bg, gameOver;
+var canvas, ctx, player, score, bg, obstacle, gameOver;
 var frameCount = 0;
 var obstacleGroup = [];
 var bgGroup = [];
@@ -19,7 +19,7 @@ var gameStatus = {
 };
 var actualState = gameStatus.play
 
-//TODO: 1º move background speed by score
+//TODO: 1º Edit obstacle frequency relate to speed
 
 eventListeners(window, "mousedown", actionByBtn);
 
@@ -55,13 +55,14 @@ function createCanvas(){
   canvas.height = screen.clientHeight;
   ctx = canvas.getContext("2d");
   screen.appendChild(canvas);
-}
+};
 
 // Cria Game Area
 var gameArea = {
   start: function(){
     createCanvas();
-    bg = new Bg(ctx, 0, "bg-image-03.png", "image");
+    bg = new Bg(ctx, 0, "images/bg-image-03.png", "image");
+    bgGroup.push(bg);
     player = new PlayerCar(ctx, "images/player-race-car.png", "image");
     score = new Score(ctx);
     gameOver = new GameOver(ctx)
@@ -80,14 +81,20 @@ var gameArea = {
   },
   reset: function(){ 
     clearGameArea();
+    bgGroup = []
     obstacleGroup = [];
+    bg = new Bg(ctx, 0, "images/bg-image-03.png", "image");
+    bgGroup.push(bg);
     player.restore();
     score.restore();
     pause = false;
   },
   restart: function(){ 
     clearGameArea();
+    bgGroup = []
     obstacleGroup = [];
+    bg = new Bg(ctx, 0, "images/bg-image-03.png", "image");
+    bgGroup.push(bg);
     score.restore();
     player.restore();
     pause = false;
@@ -100,29 +107,41 @@ function clearGameArea(){
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 };
 
-function createObstacles(){
+// Cria e atualiza Background
+function generateBG(score){
+  bg = new Bg(ctx, -ctx.canvas.height-(score.speed), "./images/bg-image-03.png", "image");
+  bgGroup.push(bg);
+};
+function updateBgPosition(){
+  let arr = [];
+  for(let i = bgGroup[bgGroup.length-1].y; i < 0; i += score.speed){
+    let res = Math.min(Math.max(i, -18), 0);
+    arr.push(res)
+  };
+
+  if((bgGroup[bgGroup.length-1].y == 0) || bgGroup[bgGroup.length-1].y == arr[arr.length -1]){
+    generateBG(score)
+  };
+  bg.update(bgGroup, score);
+};
+
+// Cria e atualiza Obstacle
+function generateObstacles(){
   const CanvasX = ctx.canvas.width
   const LeftX = Number((CanvasX*15)/100);
   const CenterX = Number((CanvasX /2) - (40 / 2));
   const RightX = Number((CanvasX*72)/100);
   const x = [LeftX, CenterX, RightX];
 
-  const obstacle = new Obstacles(ctx, randomArrayIndx(x), -70, "image");
+  obstacle = new Obstacles(ctx, randomArrayIndx(x), -70, "image");
   obstacleGroup.push(obstacle);
-  frameCount = randomIntNum(100,200);
+  frameCount = 100;
+  // frameCount = randomIntNum(100,200);
 };
 
-function updateObstacle(){
-  frameCount == 0 ? createObstacles() : frameCount--;
-  for(let i = 0; i < obstacleGroup.length; i++){
-    if(obstacleGroup[i].y < ctx.canvas.clientHeight + obstacleGroup[i].height){
-      obstacleGroup[i].y += Number(score.speed)
-      obstacleGroup[i].drawItem();
-    } else {
-      obstacleGroup.splice(i, 1);
-      i--
-    };    
-  };
+function updateObstaclePosition(){
+  frameCount == 0 ? generateObstacles() : frameCount--;
+  obstacle.update(obstacleGroup, score);
 };
 
 //update moves on the canvas
@@ -132,18 +151,19 @@ function updateCanvas(){
     for(let i=0; i < obstacleGroup.length; i++){
       if(player.carCrash(obstacleGroup[i])){
         po("BATEU!!!");
+        // NÂO EXCLUIR ESSAS LINHAS, ESTÂO DESATIVADAS PARA TESTE!
         pause = true;
         gameOver.drawItem();
         actualState = gameStatus.loose;
         return
       };
     };
+    po(actualState)
     clearGameArea();
-    bg.drawItem()
-    // updateBG()
     score.drawItem();
     score.updateSpeed();
-    updateObstacle();
+    updateObstaclePosition();
+    updateBgPosition();
     player.drawItem();
     player.newPosition();
     requestAnimationFrame(updateCanvas);

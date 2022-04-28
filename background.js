@@ -1,3 +1,5 @@
+import {po} from "./utils.basicfunctions.js";
+
 export function Bg(ctx, y, img, type){
   this.type = type
   if(type == "image"){
@@ -9,23 +11,21 @@ export function Bg(ctx, y, img, type){
   this.x = 0;
   this.y = y;
 
-  this.hSpeed = 5;
-  this.position = this.height
   
-  // this.height = Number(ctx.canvas.height);
-  // this.update = function(){
-  //   pattern = ctx.createPattern(this.bgImage, "repeat-y");
-  //   ctx.fillStyle = pattern;
-  //   ctx.fillRect(this.x, this.y, this.width, this.height);
-  // };
-  // console.log(this.bgImage.naturalHeight)
   this.drawItem = function(){
     ctx;
     ctx.drawImage(this.bgImage, this.x, this.y, this.width, this.height);
   }
 
-  this.update = function(){
-    this.position = ((this.position + this.hSpeed)% this.height + this.height) % this.height;
-    this.y++;
+  this.update = function(array, score){
+    for(let i = 0; i < array.length; i++){
+      if(array[i].y < ctx.canvas.height + 20){
+        array[i].y += score.speed - 0.5
+        array[i].drawItem()
+      } else {
+        array.splice(i, 1);
+        i--
+      };
+    }
   }
 }

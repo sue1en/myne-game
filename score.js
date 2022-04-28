@@ -34,8 +34,11 @@ export function Score(ctx){
 
   this.updateSpeed = function(){
     if(this.points > 0 && this.points % 20 == 0 && this.multiplier){
-      this.speed+=1
-      this.multiplier = false
+      //gerar valor exato na soma com 1 decimal
+      if(this.speed < 15){
+        this.speed += 0.5;
+        this.multiplier = false
+      }
     } 
   };
 

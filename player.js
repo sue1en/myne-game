@@ -1,3 +1,5 @@
+import { po } from "./utils.basicfunctions.js"
+
 export function PlayerCar(ctx, img, type){
   this.width = 35;
   this.height = 70;
@@ -36,10 +38,10 @@ export function PlayerCar(ctx, img, type){
   this.newPosition = function(){
     this.x += this.positionX;
     this.y += this.positionY;
-    // this.x = Math.min(Math.max(this.x, 0), ctx.canvas.width - this.width);
-    // this.y = Math.min(Math.max(this.y, 0), ctx.canvas.height - this.height);
-    this.x = Math.min(Math.max(this.x, Number((ctx.canvas.width*10)/100)), ctx.canvas.width - (this.width + Number((ctx.canvas.width*10)/100)));
+    this.x = Math.min(Math.max(this.x, 0), ctx.canvas.width - this.width);
     this.y = Math.min(Math.max(this.y, 0), ctx.canvas.height - this.height);
+    // this.x = Math.min(Math.max(this.x, Number((ctx.canvas.width*10)/100)), ctx.canvas.width - (this.width + Number((ctx.canvas.width*10)/100)));
+    // this.y = Math.min(Math.max(this.y, 0), ctx.canvas.height - this.height);
   };
 
   this.carCrash = function(obstacle){
