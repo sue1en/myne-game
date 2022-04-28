@@ -16,6 +16,17 @@ export function randomArrayIndx(array){
   return array[index]
 };
 
+export function objctSize(objMeasurement){
+  let screen = document.getElementById("screen")
+  if(screen.clientWidth >=290){
+    return objMeasurement * 1.17;
+  }else if(screen.clientWidth >=250){
+    return objMeasurement;
+  }else{
+    return objMeasurement * 0.72
+  };
+};
+
 export function axis(){
   var posX
   var posY

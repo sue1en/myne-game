@@ -269,7 +269,7 @@ main{
 }
 
 /*xxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-
+/* ~86% do original*/
 
 @media (max-width: 500px){
   #minigame{
@@ -380,7 +380,9 @@ main{
     box-shadow:inset 1px -1px 1px #9b9a9a, inset -3px 3px 1px #171717;
   }
 }
-/* 0.769% */
+
+/*xxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
+/* ~67% do original*/
 @media (max-width: 390px){
   #minigame{
     padding: 0.4em;

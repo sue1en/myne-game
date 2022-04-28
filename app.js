@@ -3,7 +3,7 @@ import { Bg } from "./background.js";
 import { Obstacles } from "./obstacle.js";
 import { Score } from "./score.js";
 import { GameOver } from "./gameover.js";
-import {randomIntNum, randomfltNum, randomColor, randomArrayIndx, axis, po} from "./utils.basicfunctions.js";
+import {randomIntNum, randomfltNum, randomColor, randomArrayIndx, objctSize, axis, po} from "./utils.basicfunctions.js";
 
 const screen = document.getElementById("screen");
 
@@ -18,10 +18,15 @@ var gameStatus = {
   loose:2,
 };
 var actualState = gameStatus.play
-
-//TODO: 1º Edit obstacle frequency relate to speed
-
 eventListeners(window, "mousedown", actionByBtn);
+
+/* _______TODO:_______ 
+2º Create on/off button;
+3º Create main menu;
+4º Create option select Game when start console;
+5º Create option when loose -> back to manu or play again;
+6º Create option when pause -> back to manu/ reset game/ continue playing;
+*/
 
 function start(){
   if(actualState == gameStatus.play){
@@ -129,16 +134,26 @@ function updateBgPosition(){
 function generateObstacles(){
   const CanvasX = ctx.canvas.width
   const LeftX = Number((CanvasX*15)/100);
-  const CenterX = Number((CanvasX /2) - (40 / 2));
+  const CenterX = Number((CanvasX /2) - (objctSize(35)/ 2));
   const RightX = Number((CanvasX*72)/100);
   const x = [LeftX, CenterX, RightX];
 
   obstacle = new Obstacles(ctx, randomArrayIndx(x), -70, "image");
   obstacleGroup.push(obstacle);
-  frameCount = 100;
-  // frameCount = randomIntNum(100,200);
+  if(score.speed <= 4){
+    // po(`Primeiro: ${score.speed}`)
+    frameCount = randomIntNum(50,60);
+  }else if(score.speed <= 7){
+    frameCount = randomIntNum(35,45);
+    // po(`Segundo: ${score.speed}`)
+  }else if(score.speed <= 10){
+    frameCount = randomIntNum(10,20);
+    // po(`Terceiro: ${score.speed}`)
+  }else{
+    frameCount = randomIntNum(5,10);
+    // po(`quarto: ${score.speed}`)
+  }
 };
-
 function updateObstaclePosition(){
   frameCount == 0 ? generateObstacles() : frameCount--;
   obstacle.update(obstacleGroup, score);
@@ -150,15 +165,14 @@ function updateCanvas(){
   setTimeout(function(){
     for(let i=0; i < obstacleGroup.length; i++){
       if(player.carCrash(obstacleGroup[i])){
-        po("BATEU!!!");
         // NÂO EXCLUIR ESSAS LINHAS, ESTÂO DESATIVADAS PARA TESTE!
-        pause = true;
-        gameOver.drawItem();
-        actualState = gameStatus.loose;
-        return
+        // po("BATEU!!!");
+        // pause = true;
+        // gameOver.drawItem();
+        // actualState = gameStatus.loose;
+        // return
       };
     };
-    po(actualState)
     clearGameArea();
     score.drawItem();
     score.updateSpeed();
