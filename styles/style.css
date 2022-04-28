@@ -28,12 +28,24 @@ main{
 
 /* ##___Screen */
 #minigame-screen{
+  display:flex;
+  flex-direction: column;
   box-sizing: border-box;
   border: 0.3em solid #202020;
   background-color: #404040;
   border-radius: 1em 1em 3em 1em;
-  padding: 2em 3em;
+  padding: 0em 3em 2em 3em;
   margin:2em 1.4em 0.5em 1.4em;
+}
+#power-light-circle{
+  width: 12px;
+  height: 12px;
+  margin: 0.6em;
+  background-color:#0f3803;
+  border-radius: 50%;
+  border: 0.15em solid #0f3803;
+  box-sizing: border-box;
+  box-shadow:inset 1px -1px 2px #0a1a05, inset -1px 2px 1px #366f24;
 }
 #screen{
   box-sizing: border-box;
@@ -53,10 +65,12 @@ main{
   height: 300px;
   width: 300px;
 }
-/* ##___Screen */
 
+/* ##___Minigame-Name */
 #minigame-name{
   width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 .minigame-name-text{
   padding:0.15em 1.4em;
@@ -66,7 +80,35 @@ main{
   text-align:left;
   color: #2a42a3;
 }
-
+/* ##___Power_btn */
+#minigame-power-group{
+  display: flex;
+  align-items: center;
+  padding:0.15em 2em;
+}
+#btn-on-off{
+  box-sizing: border-box;
+  width: 40px;
+  height: 15px;
+  padding: 0.4em 0.4em 0 0.4em;
+  margin: 0.15em 0.8em 0.15em 0.4em;
+  border: 0.2em solid #303030;
+  border-radius: 1em;
+  background-color:#8f8f8f;
+  box-shadow: inset -1px 2px 1px #d4d4d4;
+}
+#btn-on-off:active{
+  box-shadow: inset -2px 2px 2px #2f2f2f;
+  border: 0.2em solid #232323;
+  background-color:#545454;
+}
+#text-on-off{
+  font-size: 13px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  text-align:left;
+  color: #383838;
+}
 /* ##___BUTTONS */
 
 #btn-group{
@@ -110,7 +152,6 @@ main{
   background-color:#545454;
   color: #d2d2d2;
 }
-
 
 #btn-gamecontrols{
   display: flex;
@@ -281,7 +322,13 @@ main{
   }
   #minigame-screen{
     border-radius: 1em 1em 3em 1em;
-    padding: 1.8em 2.6em;
+    padding:0 2.6em 1.8em 2.6em;
+    margin-top: 1.75em;
+  }
+  #power-light-circle{
+    width: 10px;
+    height: 10px;
+    border-width: 0.1em;
   }
   #screen{
     height: 260px;
@@ -395,8 +442,13 @@ main{
   }
   #minigame-screen{
     border-radius: 1em 1em 3em 1em;
-    padding: 1.4em 2em;
-    margin:1.2em 1.4em 0.5em 1.4em;
+    padding:0 2em 1.4em 2em;
+    margin:1em 1.4em 0.5em 1.4em;
+  }
+  #power-light-circle{
+    width: 8px;
+    height: 8px;
+    margin:0.45em;
   }
   #screen{
     height: 200px;
@@ -408,6 +460,20 @@ main{
   }
   .minigame-name-text{
     font-size: 14px;
+  }
+  #btn-on-off{
+    width: 30px;
+    height: 12px;
+    margin-left:0.4em;
+    margin-right:0;
+    border-width: 0.15em;
+  }
+  #btn-on-off:active{
+    box-shadow: inset -2px 2px 2px #2f2f2f;
+    border: 0.2em solid #232323;
+  }
+  #text-on-off{
+    font-size: 10px;
   }
   #btn-group{
     padding:1.5em 1em 0 1em;

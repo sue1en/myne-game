@@ -27,6 +27,17 @@ export function objctSize(objMeasurement){
   };
 };
 
+export function lightOn(){
+  const circleLight = document.getElementById("power-light-circle");
+  circleLight.style.backgroundColor = "#46ff0e"
+  circleLight.style.boxShadow = "0px 0px 4px #46ff0e, inset -1px 2px 1px #e6ffde"
+};
+export function lightOff(){
+  const circleLight = document.getElementById("power-light-circle");
+  circleLight.style.backgroundColor = "#0f3803"
+  circleLight.style.boxShadow = "inset 1px -1px 2px #0a1a05, inset -1px 2px 1px #366f24"
+};
+
 export function axis(){
   var posX
   var posY

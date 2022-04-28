@@ -3,46 +3,79 @@ import { Bg } from "./background.js";
 import { Obstacles } from "./obstacle.js";
 import { Score } from "./score.js";
 import { GameOver } from "./gameover.js";
-import {randomIntNum, randomfltNum, randomColor, randomArrayIndx, objctSize, axis, po} from "./utils.basicfunctions.js";
+import { Text } from "./text.js";
+import {randomIntNum, randomfltNum, randomColor, randomArrayIndx, objctSize, lightOn, lightOff, axis, po} from "./utils.basicfunctions.js";
 
 const screen = document.getElementById("screen");
 
-var canvas, ctx, player, score, bg, obstacle, gameOver;
+var canvas, ctx, player, score, bg, obstacle, gameOver, myneGame;
 var frameCount = 0;
 var obstacleGroup = [];
 var bgGroup = [];
 var pause = false;
+
 var gameStatus = {
   play:0,
   playing:1,
   loose:2,
 };
-var actualState = gameStatus.play
+var consoleStatus = {
+  off:0,
+  on:1
+};
+var gameState = gameStatus.play;
+var consoleState = consoleStatus.off;
+
 eventListeners(window, "mousedown", actionByBtn);
 
 /* _______TODO:_______ 
-2º Create on/off button;
-3º Create main menu;
 4º Create option select Game when start console;
 5º Create option when loose -> back to manu or play again;
 6º Create option when pause -> back to manu/ reset game/ continue playing;
 */
 
 function start(){
-  if(actualState == gameStatus.play){
-    actualState = gameStatus.playing;
+  if(gameState == gameStatus.play){
+    gameState = gameStatus.playing;
     gameArea.start();
     setInterval(function(){score.updateByTime(player)}, 200)
     axis()
-  }else if(actualState == gameStatus.playing){
+  }else if(gameState == gameStatus.playing){
     gameArea.reset()
     axis()
-  }else if(actualState == gameStatus.loose){
-    actualState = gameStatus.playing;
+  }else if(gameState == gameStatus.loose){
+    gameState = gameStatus.playing;
     gameArea.restart();
     axis()
   };
 };
+
+function powerOn(){
+  if(consoleState == consoleStatus.off){
+    consoleAction.on();
+    consoleState = consoleStatus.on;
+  }else if(consoleState == consoleStatus.on){
+    consoleAction.off();
+    consoleState = consoleStatus.off;
+  };
+};
+
+var consoleAction = {
+  on: function(){
+    po("comecei");
+    lightOn()
+
+    createCanvas();
+    myneGame = new Text(ctx, ((ctx.canvas.height/2)-20), "bold", "30px","arial", "#000000", "Myne-Game");
+    let pressStart = new Text(ctx, ((ctx.canvas.height/2)+40), "normal", "18px","arial", "#000000", "Press Start to begin");
+    myneGame.drawItem();
+    setTimeout(()=>{pressStart.drawItem()}, 500);
+  },
+  off: function(){
+    lightOff()
+    document.getElementById("gameCanvas").remove()
+  }
+}
 
 function pauseFunc(){
   if(!pause){
@@ -70,7 +103,7 @@ var gameArea = {
     bgGroup.push(bg);
     player = new PlayerCar(ctx, "images/player-race-car.png", "image");
     score = new Score(ctx);
-    gameOver = new GameOver(ctx)
+    gameOver = new Text(ctx, (ctx.canvas.height/2), "bold", "40px", "arial", "rgba(255, 255, 255, 0.90)","Game Over")
     
     updateCanvas();
 
@@ -166,11 +199,11 @@ function updateCanvas(){
     for(let i=0; i < obstacleGroup.length; i++){
       if(player.carCrash(obstacleGroup[i])){
         // NÂO EXCLUIR ESSAS LINHAS, ESTÂO DESATIVADAS PARA TESTE!
-        // po("BATEU!!!");
-        // pause = true;
-        // gameOver.drawItem();
-        // actualState = gameStatus.loose;
-        // return
+        po("BATEU!!!");
+        pause = true;
+        gameOver.drawItem();
+        gameState = gameStatus.loose;
+        return
       };
     };
     clearGameArea();
@@ -193,6 +226,7 @@ const gameControlls = {
 };
 
 const consoleBtn = {
+  btnOnOff: document.getElementById("btn-on-off"),
   btnStart: document.getElementById("btn-masters-start"),
   btnPause: document.getElementById("btn-masters-pause"),
   btnUp: document.getElementById("btn-directions-up"),
@@ -212,6 +246,15 @@ function actionByBtn(e){
     return; // Do nothing if event already handled
   };
   switch(e.target){
+    case consoleBtn.btnOnOff:
+      powerOn();
+      break;
+    case consoleBtn.btnStart:
+      start();
+      break;
+    case consoleBtn.btnPause:
+      pauseFunc();
+      break;
     case consoleBtn.btnLeft:
       gameControlls.moveLeft();
       break;
@@ -223,12 +266,6 @@ function actionByBtn(e){
       break;
     case consoleBtn.btnDown:
       gameControlls.moveDown();
-      break;
-    case consoleBtn.btnStart:
-      start();
-      break;
-    case consoleBtn.btnPause:
-      pauseFunc();
       break;
     case consoleBtn.btnActionA:
       console.log("Eu sou A");
