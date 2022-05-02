@@ -1,14 +1,18 @@
-export function randomIntNum(max, min){
-  return Math.floor(Math.random() * (max - min +1)) + min;
+export function eventListeners(elemt, action, func){
+  elemt.addEventListener(action, func)
 };
 
-export function randomColor(){
-  return `rgb(${randomIntNum(0, 255)},${randomIntNum(0, 255)},${randomIntNum(0, 255)})`;
+export function randomIntNum(max, min){
+  return Math.floor(Math.random() * (max - min +1)) + min;
 };
 
 export function randomfltNum(max, min){
   const n = Math.random() * (max - min +1) + min;
   return Number(n.toFixed(2));
+};
+
+export function randomColor(){
+  return `rgb(${randomIntNum(0, 255)},${randomIntNum(0, 255)},${randomIntNum(0, 255)})`;
 };
 
 export function randomArrayIndx(array){

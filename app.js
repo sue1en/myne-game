@@ -1,14 +1,16 @@
-import {PlayerCar} from "./player.js";
-import { Bg } from "./background.js";
-import { Obstacles } from "./obstacle.js";
-import { Score } from "./score.js";
-import { GameOver } from "./gameover.js";
-import { Text } from "./text.js";
-import {randomIntNum, randomfltNum, randomColor, randomArrayIndx, objctSize, lightOn, lightOff, axis, po} from "./utils.basicfunctions.js";
+import {PlayerCar} from "./objects/raceGameObjects/player.js";
+import { Obstacles } from "./objects/raceGameObjects/obstacle.js";
+import { Score } from "./objects/raceGameObjects/score.js";
+import { Bg } from "./objects/raceGameObjects/background.js";
+import { Text } from "./objects/text.js";
+import { Shape } from "./objects/shape.object.js";
+import { MenuText } from "./objects/menu.text.js";
+import { gameList } from "./lists/games.list.js";
+import {eventListeners, randomIntNum, randomfltNum, randomColor, randomArrayIndx, objctSize, lightOn, lightOff, axis, po} from "./utils/utils.basicfunctions.js";
 
 const screen = document.getElementById("screen");
 
-var canvas, ctx, player, score, bg, obstacle, gameOver, myneGame;
+var canvas, ctx, player, score, bg, obstacle, gameOver, myneGame, menuBg;
 var frameCount = 0;
 var obstacleGroup = [];
 var bgGroup = [];
@@ -34,7 +36,78 @@ eventListeners(window, "mousedown", actionByBtn);
 6º Create option when pause -> back to manu/ reset game/ continue playing;
 */
 
-function start(){
+
+function powerOn(){
+  if(consoleState == consoleStatus.off){
+    consoleAction.on();
+    consoleState = consoleStatus.on;
+  }else if(consoleState == consoleStatus.on){
+    consoleAction.off();
+    consoleState = consoleStatus.off;
+  };
+};
+
+let arrM = []
+function start(index){
+  if(consoleState == consoleStatus.off){
+    po("Não estou Ligado!!!")
+    return
+  };
+  po("Eu sou Start!!!")
+  clearCanvasArea()
+  menuBackground();
+  gameList.map(menuItem);
+  po(arrM)
+  
+  eventListeners(window, "click", selectMenuItem)
+  
+};
+
+
+function menuItem(item, index, arr){
+  var textMenu = new MenuText(ctx, 100 + (50 * index), "normal", "18px","arial", "#000000", item.name);
+  textMenu.drawItem()
+  arrM.push(textMenu)
+};
+function menuBackground(){
+  menuBg = new Shape(ctx, (ctx.canvas.width*0.15), (ctx.canvas.height*0.20), ctx.canvas.width - (ctx.canvas.width*0.30), ctx.canvas.height - (ctx.canvas.height*0.40), "rgba(90, 105, 60, 0.50)", "strokeOn");
+  
+  return menuBg.drawItem();
+};
+
+function test(index){
+  switch(index){
+    case 0:
+      po("CAR")
+      break;
+    case 1:
+      po("BIKE")
+      break;
+    case 1:
+      po("BOAT")
+      break;
+  };
+}
+
+function selectMenuItem(e){
+  if(e.defaultPrevented) {
+    return; // Do nothing if event already handled
+  };
+  switch(e.target){
+    case consoleBtn.btnUp:
+      po("EU SOU UP")
+      break;
+      case consoleBtn.btnDown:
+      po("EU SOU DOWN")
+      break;
+  };
+};
+
+function startGame(){
+  if(consoleState == consoleStatus.off){
+    po("Não estou Ligado!!!")
+    return
+  };
   if(gameState == gameStatus.play){
     gameState = gameStatus.playing;
     gameArea.start();
@@ -50,15 +123,31 @@ function start(){
   };
 };
 
-function powerOn(){
-  if(consoleState == consoleStatus.off){
-    consoleAction.on();
-    consoleState = consoleStatus.on;
-  }else if(consoleState == consoleStatus.on){
-    consoleAction.off();
-    consoleState = consoleStatus.off;
-  };
+const menuControlls = {
+  moveLeft: function(){player.positionX -= 5},
+  moveRight: function(){player.positionX += 5},
+  moveUp: function(){player.positionY -= 5},
+  moveDown: function(){player.positionY += 5},
+  clearMove: function(){player.positionX = 0, player.positionY = 0}
 };
+
+// window.onmousedown = function (){
+//   var posX = event.clientX;
+//   var posY = event.clientY;
+//   var x = parseInt((ctx.canvas.width / 2) - (menuBg.width / 2));
+//   var y = parseInt((ctx.canvas.height / 2) - (menuBg.height / 2));
+//   var index = -1;
+
+//   if (posX > x && posX < x + menuBg.width) {
+//       if (posY > y && posY < y + menuBg.height) {
+//         index = parseInt((posY - y) / 100);
+//           po(index)
+//       }
+//   }
+
+//   test(index);
+// }
+
 
 var consoleAction = {
   on: function(){
@@ -75,15 +164,6 @@ var consoleAction = {
     lightOff()
     document.getElementById("gameCanvas").remove()
   }
-}
-
-function pauseFunc(){
-  if(!pause){
-    pause = true
-  }else{
-    pause = false
-    updateCanvas()
-  };
 };
 
 function createCanvas(){
@@ -95,15 +175,24 @@ function createCanvas(){
   screen.appendChild(canvas);
 };
 
+function pauseFunc(){
+  if(!pause){
+    pause = true
+  }else{
+    pause = false
+    updateCanvas()
+  };
+};
+
 // Cria Game Area
 var gameArea = {
   start: function(){
-    createCanvas();
+    clearCanvasArea();
     bg = new Bg(ctx, 0, "images/bg-image-03.png", "image");
     bgGroup.push(bg);
     player = new PlayerCar(ctx, "images/player-race-car.png", "image");
     score = new Score(ctx);
-    gameOver = new Text(ctx, (ctx.canvas.height/2), "bold", "40px", "arial", "rgba(255, 255, 255, 0.90)","Game Over")
+    gameOver = new Text(ctx, (ctx.canvas.height/2), "bold", "40px", "arial", "rgba(255, 255, 255, 0.90)","Game Over", "strokeON")
     
     updateCanvas();
 
@@ -118,7 +207,7 @@ var gameArea = {
     pause = true;
   },
   reset: function(){ 
-    clearGameArea();
+    clearCanvasArea();
     bgGroup = []
     obstacleGroup = [];
     bg = new Bg(ctx, 0, "images/bg-image-03.png", "image");
@@ -128,7 +217,7 @@ var gameArea = {
     pause = false;
   },
   restart: function(){ 
-    clearGameArea();
+    clearCanvasArea();
     bgGroup = []
     obstacleGroup = [];
     bg = new Bg(ctx, 0, "images/bg-image-03.png", "image");
@@ -141,7 +230,7 @@ var gameArea = {
 };
 
 // Limpa Game Area
-function clearGameArea(){
+function clearCanvasArea(){
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 };
 
@@ -206,7 +295,7 @@ function updateCanvas(){
         return
       };
     };
-    clearGameArea();
+    clearCanvasArea();
     score.drawItem();
     score.updateSpeed();
     updateObstaclePosition();
@@ -237,10 +326,6 @@ const consoleBtn = {
   btnActionB: document.getElementById("btn-actions-b"),
 };
 
-function eventListeners(elemt, action, func){
-  elemt.addEventListener(action, func)
-};
-
 function actionByBtn(e){
   if(e.defaultPrevented) {
     return; // Do nothing if event already handled
@@ -250,7 +335,7 @@ function actionByBtn(e){
       powerOn();
       break;
     case consoleBtn.btnStart:
-      start();
+      start()
       break;
     case consoleBtn.btnPause:
       pauseFunc();
@@ -261,16 +346,18 @@ function actionByBtn(e){
     case consoleBtn.btnRight:
       gameControlls.moveRight();
       break;
-    case consoleBtn.btnUp:
-      gameControlls.moveUp();
-      break;
-    case consoleBtn.btnDown:
-      gameControlls.moveDown();
-      break;
+    // case consoleBtn.btnUp:
+    //   gameControlls.moveUp();
+    //   break;
+    // case consoleBtn.btnDown:
+    //   gameControlls.moveDown();
+    //   break;
     case consoleBtn.btnActionA:
       console.log("Eu sou A");
       break;
     case consoleBtn.btnActionB:
+      // Iniciar game temporáriamente
+      startGame();
       console.log("Eu sou B");
       break;
     };
