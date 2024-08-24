@@ -1,5 +1,3 @@
-import {po} from "../../utils/utils.basicfunctions.js";
-
 export function Bg(ctx, y, img, type){
   this.ctx = ctx
   this.type = type

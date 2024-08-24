@@ -1,4 +1,4 @@
-import { po, objctSize} from "../../utils/utils.basicfunctions.js"
+import { objctSize } from "../../utils/utils.basicfunctions.js"
 
 export function PlayerCar(ctx, img, type){
   this.ctx = ctx;
@@ -45,15 +45,15 @@ PlayerCar.prototype.newPosition = function(){
 };
 
 PlayerCar.prototype.carCrash = function(obstacle){
-  var playerLeft = this.x;
-  var playerRight = this.x + (this.width);
-  var playerTop = this.y;
-  var playerBottom = this.y + (this.height);
-  var obstacleLeft = obstacle.x+2;
-  var obstacleRight = obstacle.x + (obstacle.width-2);
-  var obstacleTop = obstacle.y+2;
-  var obstacleBotton = obstacle.y + (obstacle.height-2);
-  var crash = true;
+  let playerLeft = this.x;
+  let playerRight = this.x + (this.width);
+  let playerTop = this.y;
+  let playerBottom = this.y + (this.height);
+  let obstacleLeft = obstacle.x+2;
+  let obstacleRight = obstacle.x + (obstacle.width-2);
+  let obstacleTop = obstacle.y+2;
+  let obstacleBotton = obstacle.y + (obstacle.height-2);
+  let crash = true;
   if((playerTop > obstacleBotton) || (playerBottom < obstacleTop) || (playerLeft > obstacleRight) || (playerRight < obstacleLeft)){
     crash = this.crash;
   }

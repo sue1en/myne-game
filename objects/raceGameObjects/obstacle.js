@@ -1,4 +1,4 @@
-import {randomColor, randomArrayIndx, objctSize, po} from "../../utils/utils.basicfunctions.js";
+import {randomColor, randomArrayIndx, objctSize} from "../../utils/utils.basicfunctions.js";
 import { obstCarsImgs } from "../../lists/obstacle.list.js";
 
 export function Obstacles(ctx, x, y, type){

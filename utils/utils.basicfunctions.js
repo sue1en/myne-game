@@ -43,8 +43,8 @@ export function lightOff(){
 };
 
 export function axis(){
-  var posX
-  var posY
+  let posX
+  let posY
   let canv = document.getElementById("gameCanvas")
   canv.addEventListener("click", function(e){
     posX = e.offsetX
@@ -52,5 +52,3 @@ export function axis(){
     document.getElementById("input").value = `X: ${posX} | Y: ${posY}`
   })
 };
-
-export function po(print){console.log(print)};

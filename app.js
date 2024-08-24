@@ -6,27 +6,26 @@ import { Text } from "./objects/text.js";
 import { Shape } from "./objects/shape.object.js";
 import { MenuText } from "./objects/menu.text.js";
 import { gameList } from "./lists/games.list.js";
-import {eventListeners, randomIntNum, randomfltNum, randomColor, randomArrayIndx, objctSize, lightOn, lightOff, axis, po} from "./utils/utils.basicfunctions.js";
+import {eventListeners, randomIntNum, randomfltNum, randomColor, randomArrayIndx, objctSize, lightOn, lightOff, axis} from "./utils/utils.basicfunctions.js";
 
 const screen = document.getElementById("screen");
 
-var canvas, ctx, player, score, bg, obstacle, gameOver, myneGame, menuBg;
-var frameCount = 0;
-var obstacleGroup = [];
-var bgGroup = [];
-var pause = false;
-
-var gameStatus = {
+let canvas, ctx, player, score, bg, obstacle, gameOver, myneGame, menuBg;
+let frameCount = 0;
+let obstacleGroup = [];
+let bgGroup = [];
+let pause = false;
+let gameStatus = {
   play:0,
   playing:1,
   loose:2,
 };
-var consoleStatus = {
+let consoleStatus = {
   off:0,
   on:1
 };
-var gameState = gameStatus.play;
-var consoleState = consoleStatus.off;
+let gameState = gameStatus.play;
+let consoleState = consoleStatus.off;
 
 eventListeners(window, "mousedown", actionByBtn);
 
@@ -35,7 +34,6 @@ eventListeners(window, "mousedown", actionByBtn);
 5º Create option when loose -> back to manu or play again;
 6º Create option when pause -> back to manu/ reset game/ continue playing;
 */
-
 
 function powerOn(){
   if(consoleState == consoleStatus.off){
@@ -50,22 +48,17 @@ function powerOn(){
 let arrM = []
 function start(index){
   if(consoleState == consoleStatus.off){
-    po("Não estou Ligado!!!")
     return
   };
-  po("Eu sou Start!!!")
   clearCanvasArea()
   menuBackground();
   gameList.map(menuItem);
-  po(arrM)
   
   eventListeners(window, "click", selectMenuItem)
-  
 };
 
-
 function menuItem(item, index, arr){
-  var textMenu = new MenuText(ctx, 100 + (50 * index), "normal", "18px","arial", "#000000", item.name);
+  let textMenu = new MenuText(ctx, 100 + (50 * index), "normal", "18px","arial", "#000000", item.name);
   textMenu.drawItem()
   arrM.push(textMenu)
 };
@@ -75,37 +68,20 @@ function menuBackground(){
   return menuBg.drawItem();
 };
 
-function test(index){
-  switch(index){
-    case 0:
-      po("CAR")
-      break;
-    case 1:
-      po("BIKE")
-      break;
-    case 1:
-      po("BOAT")
-      break;
-  };
-}
-
 function selectMenuItem(e){
   if(e.defaultPrevented) {
     return; // Do nothing if event already handled
   };
   switch(e.target){
     case consoleBtn.btnUp:
-      po("EU SOU UP")
       break;
       case consoleBtn.btnDown:
-      po("EU SOU DOWN")
       break;
   };
 };
 
 function startGame(){
   if(consoleState == consoleStatus.off){
-    po("Não estou Ligado!!!")
     return
   };
   if(gameState == gameStatus.play){
@@ -123,20 +99,21 @@ function startGame(){
   };
 };
 
-const menuControlls = {
-  moveLeft: function(){player.positionX -= 5},
-  moveRight: function(){player.positionX += 5},
-  moveUp: function(){player.positionY -= 5},
-  moveDown: function(){player.positionY += 5},
-  clearMove: function(){player.positionX = 0, player.positionY = 0}
-};
+// Add 
+// const menuControlls = {
+//   moveLeft: function(){player.positionX -= 5},
+//   moveRight: function(){player.positionX += 5},
+//   moveUp: function(){player.positionY -= 5},
+//   moveDown: function(){player.positionY += 5},
+//   clearMove: function(){player.positionX = 0, player.positionY = 0}
+// };
 
 // window.onmousedown = function (){
-//   var posX = event.clientX;
-//   var posY = event.clientY;
-//   var x = parseInt((ctx.canvas.width / 2) - (menuBg.width / 2));
-//   var y = parseInt((ctx.canvas.height / 2) - (menuBg.height / 2));
-//   var index = -1;
+//   let posX = event.clientX;
+//   let posY = event.clientY;
+//   let x = parseInt((ctx.canvas.width / 2) - (menuBg.width / 2));
+//   let y = parseInt((ctx.canvas.height / 2) - (menuBg.height / 2));
+//   let index = -1;
 
 //   if (posX > x && posX < x + menuBg.width) {
 //       if (posY > y && posY < y + menuBg.height) {
@@ -144,14 +121,11 @@ const menuControlls = {
 //           po(index)
 //       }
 //   }
-
 //   test(index);
 // }
 
-
-var consoleAction = {
+let consoleAction = {
   on: function(){
-    po("comecei");
     lightOn()
 
     createCanvas();
@@ -184,8 +158,8 @@ function pauseFunc(){
   };
 };
 
-// Cria Game Area
-var gameArea = {
+// Create Game Area
+let gameArea = {
   start: function(){
     clearCanvasArea();
     bg = new Bg(ctx, 0, "images/bg-image-03.png", "image");
@@ -229,12 +203,12 @@ var gameArea = {
   }
 };
 
-// Limpa Game Area
+// clear Game Area
 function clearCanvasArea(){
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 };
 
-// Cria e atualiza Background
+// Create and Update Background
 function generateBG(score){
   bg = new Bg(ctx, -ctx.canvas.height-(score.speed), "./images/bg-image-03.png", "image");
   bgGroup.push(bg);
@@ -252,7 +226,7 @@ function updateBgPosition(){
   bg.update(bgGroup, score);
 };
 
-// Cria e atualiza Obstacle
+// Create and Update Obstacle
 function generateObstacles(){
   const CanvasX = ctx.canvas.width
   const LeftX = Number((CanvasX*15)/100);
@@ -263,17 +237,13 @@ function generateObstacles(){
   obstacle = new Obstacles(ctx, randomArrayIndx(x), -70, "image");
   obstacleGroup.push(obstacle);
   if(score.speed <= 4){
-    // po(`Primeiro: ${score.speed}`)
     frameCount = randomIntNum(50,60);
   }else if(score.speed <= 7){
     frameCount = randomIntNum(35,45);
-    // po(`Segundo: ${score.speed}`)
   }else if(score.speed <= 10){
     frameCount = randomIntNum(10,20);
-    // po(`Terceiro: ${score.speed}`)
   }else{
     frameCount = randomIntNum(5,10);
-    // po(`quarto: ${score.speed}`)
   }
 };
 function updateObstaclePosition(){
@@ -287,8 +257,6 @@ function updateCanvas(){
   setTimeout(function(){
     for(let i=0; i < obstacleGroup.length; i++){
       if(player.carCrash(obstacleGroup[i])){
-        // NÂO EXCLUIR ESSAS LINHAS, ESTÂO DESATIVADAS PARA TESTE!
-        po("BATEU!!!");
         pause = true;
         gameOver.drawItem();
         gameState = gameStatus.loose;
@@ -353,12 +321,9 @@ function actionByBtn(e){
     //   gameControlls.moveDown();
     //   break;
     case consoleBtn.btnActionA:
-      console.log("Eu sou A");
+      startGame();
       break;
     case consoleBtn.btnActionB:
-      // Iniciar game temporáriamente
-      startGame();
-      console.log("Eu sou B");
       break;
     };
     e.preventDefault();
